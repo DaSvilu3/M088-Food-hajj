@@ -49,7 +49,7 @@ class _MyLocationPageState extends State<MyProviderPage> {
         dedctor = Colors.yellow;
       }
       ListTile tile = new ListTile(
-        title: new Text(map["name"] + " morning"),
+        title: new Text(map["name"] + " - morning"),
         subtitle: new Text("40 meals"),
         leading: new CircleAvatar(
           child: new Text((i + 1).toString()),
@@ -57,10 +57,6 @@ class _MyLocationPageState extends State<MyProviderPage> {
         ),
       );
       _list.add(tile);
-
-      
-      
-
     }
     return _list;
   }

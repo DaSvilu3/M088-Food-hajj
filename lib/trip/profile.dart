@@ -22,6 +22,7 @@ class MyProfilePage extends StatefulWidget {
 class _MyProfilePageState extends State<MyProfilePage> {
   Map map;
   _MyProfilePageState({this.map});
+  final tooltip_key = new GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -29,6 +30,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     getLocations();
   }
 
+  
   @override
   Widget build(BuildContext context) {
     var ref = FirebaseDatabase.instance.reference();
@@ -36,6 +38,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     return new DefaultTabController(
       length: 3,
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
@@ -68,7 +71,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
           ],
         ),
         floatingActionButton: new FloatingActionButton(
-          child: new Icon(Icons.map),
+          child: new Tooltip(message: 'Look Neareast Point',
+          key: tooltip_key,
+          
+          child: new Icon(Icons.map)),
           onPressed: (){
             Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new MyLocationPage(title: "Map",)));
           },
@@ -76,6 +82,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
       ),
     );
   }
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+void showInSnackBar(String value) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(value), duration: new Duration(seconds: 4),));
+}
+
 
   List<Widget> _buildLocationListView(String type, int choose) {
     List<Widget> _list = [];
@@ -91,12 +104,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
       }
       ListTile tile = new ListTile(
         title: new Text(map["name"]),
-        subtitle: new Text(
-          "still : " + 
-         (map["can_handle"] - map[type]).toString() +
-            " out " +
-            map["can_handle"].toString() +
-            " meals"),
         leading: new CircleAvatar(
           child: new Text((i + 1).toString()),
           backgroundColor: dedctor,
@@ -108,22 +115,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
       for (int i = choose; i < choose + 3; i++) {
         int number = 0;
         booking.forEach((book) {
-          print("------");
           if (book == null) return;
           String t = book["type"];
           String code = book["trip"];
           String tes = type[type.length - 1];
+          String loc = book["location"].toString();
           if (t.indexOf(tes) != -1 &&
               code.indexOf("OM_1333") != -1 &&
-              book["p"] == i) {
-            number = (book["number"]);
-          } else if (t.indexOf(tes) != -1) {
-            print("noo"); 
+              book["p"] == i && loc.indexOf(i.toString()) != -1 ) {
+            number += (book["number"]);
+            print(number);
           }
         });
         _list.add(new ListTile(
-            title: new Text(periods[i]["time"]),
-            subtitle: new Text(number.toString()),
+            title: new Text(periods[i]["time"], style: new TextStyle(color: Colors.grey),),
+            subtitle: new Text( "Left: " + ( map["can_handle"] -  number).toString() + " meal",
+                              style: new TextStyle(fontSize: 12.0),),
             leading: new FlatButton(
               child: new Icon(Icons.add, color: Colors.white,),
               color: Colors.blue,
@@ -160,7 +167,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             var uuid = new Uuid().v1();
                             FirebaseDatabase.instance.reference().child("/booking/5/").set(map2).then((onValue){
                               Navigator.of(context).pop();
-                              Navigator.of(context).pop();
+                              showInSnackBar("your order will be ready just in your time!");
+
                             });
                           },
                         ),
@@ -170,6 +178,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 );
               },
             )));
+            _list.add(new Divider());
       }
 
     }
@@ -229,6 +238,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
         });
 
         setState(() {
+          
+          final dynamic tooltip = tooltip_key.currentState;
+          tooltip.ensureTooltipVisible();
+
           print("refreshed");
         });
       });
@@ -240,39 +253,39 @@ class _MyProfilePageState extends State<MyProfilePage> {
     String text = r'''
 [{
   "id" : 1,
-  "time" : "6:00-7:00",
+  "time" : "6:00AM to 7:00AM",
   "type" : "m"
 }, {
   "id" : 2,
-  "time" : "7:00-8:00",
+  "time" : "7:00AM to 8:00AM",
   "type" : "m"
 }, {
   "id" : 3,
-  "time" : "8:00-9:00",
+  "time" : "8:00AM to 9:00AM",
   "type" : "m"
 }, {
   "id" : 4,
-  "time" : "11:30-12:30",
+  "time" : "11:30AM to 12:30PM",
   "type" : "l"
 }, {
   "id" : 5,
-  "time" : "12:30-1:30",
+  "time" : "12:30PM to 1:30PM",
   "type" : "l"
 }, {
   "id" : 6,
-  "time" : "1:30-2:30",
+  "time" : "1:30PM to 2:30PM",
   "type" : "l"
 }, {
   "id" : 7,
-  "time" : "6:00:7:00",
+  "time" : "6:00PM to 7:00PM",
   "type" : "d"
 }, {
   "id" : 8,
-  "time" : "7:00-8:00",
+  "time" : "7:00PM to 8:00PM",
   "type" : "d"
 }, {
   "id" : 9,
-  "time" : "8:00-9:00",
+  "time" : "8:00PM to 9:00PM",
   "type" : "d"
 } ]
   ''';

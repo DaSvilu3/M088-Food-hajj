@@ -39,10 +39,7 @@ class _MyLocationPageState extends State<MyLocationPage> {
           maxScale: 4.0,
         )
       ),
-      floatingActionButton: new FloatingActionButton(
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+       // This trailing comma makes auto-formatting nicer for build methods.
     );
   } 
 }

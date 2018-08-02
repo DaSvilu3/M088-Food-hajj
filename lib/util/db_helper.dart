@@ -15,7 +15,6 @@ abstract class DBHelperBase {
   Map convertJsonToMap(String json);
   String randomString(int length);
   Future<int> delete_section(String base_key);
-
   void removeKey(String key);
 }
 

@@ -51,10 +51,15 @@ bool _loading = false;
               'Please Enter your campaign code here : ',
               style: new TextStyle(fontSize: 25.0),
             ),
+            new Text("No need for debuging"),
             new Container(
               margin: new EdgeInsets.all(10.0),
               padding: new EdgeInsets.all(10.0),
               child: new TextField (  
+                decoration: new InputDecoration(
+                  labelText: "CODE",
+                  hintText: "NO need of code while debuging"
+                ),
                 onChanged: (str){
                   setState(() {
                     key = str;                 
@@ -63,9 +68,10 @@ bool _loading = false;
               ) ,
             ),
             new FlatButton(
+              
               child: new Row(
                 children: <Widget>[
-                  new Icon(Icons.bookmark_border, color: Colors.white, size: 20.0,),
+                  new Icon(Icons.bookmark_border, color: Colors.white, size: 25.0,),
                   new Text("Book Now", style: new TextStyle(color: Colors.white, fontSize: 20.0),)
                 ],
               ),
@@ -140,6 +146,7 @@ bool _loading = false;
       body: _loading ? bodyProgress : body,
       floatingActionButton: new FloatingActionButton(
         child: new Icon(Icons.monetization_on),
+        
         onPressed: (){
           Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new MyProviderPage(title: "PROVIDER",) ));
         },
