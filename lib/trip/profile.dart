@@ -73,7 +73,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
         floatingActionButton: new FloatingActionButton(
           child: new Tooltip(message: 'Look Neareast Point',
           key: tooltip_key,
-          
           child: new Icon(Icons.map)),
           onPressed: (){
             Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new MyLocationPage(title: "Map",)));

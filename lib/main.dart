@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hajj',
       theme: new ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.red,
+        primaryColor: Colors.green
       ),
       home: new MyCodePage(title: 'Hajj Food Manager'),
     );
